@@ -4,116 +4,103 @@ import java.sql.*;
 
 public class Conexao {
 
-  /*  private static final String URL = "jdbc:sqlite:Resenha_Fut.db";
+    private static final String URL = "jdbc:sqlite:Resenha_Fut.db";
 
     public static Connection conectar() throws SQLException {
         Connection con = DriverManager.getConnection(URL);
-        cirarTabelas(con);
+        try (Statement stmt = con.createStatement())
+        {
+            stmt.execute("PRAGMA foreign_keys = ON");
+        }
+        criarTabelas(con);
         return con;
     }
 
-    public static void cirarTabelas(Connection con) throws SQLException{
-
+    public static void criarTabelas(Connection con) throws SQLException {
         Statement stmt = con.createStatement();
 
+        String sqlCadastro = """
+            CREATE TABLE IF NOT EXISTS Cadastro(
+                id_cadastro INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                email TEXT NOT NULL,
+                senha TEXT NOT NULL,
+                idade INTEGER NOT NULL,
+                cpf TEXT NOT NULL
+            )
+        """;
+
         String sqlProduto = """
-                CREATE TABLE IF NOT EXISTS produtos (
-                    id_Produto    INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Nome          TEXT NOT NULL,
-                    Tipo          TEXT NOT NULL,
-                    Preco         NUMERIC(10,2) NOT NULL,
-                    Categoria     TEXT NOT NULL
-                )
-                """;
+            CREATE TABLE IF NOT EXISTS Produto (
+                id_produto INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                tipoProduto TEXT NOT NULL,
+                preco NUMERIC(10,2) NOT NULL
+            )
+        """;
 
         String sqlCamisa = """
             CREATE TABLE IF NOT EXISTS Camisa (
-                id_Camisa       INTEGER PRIMARY KEY AUTOINCREMENT,
-                Material        TEXT    NOT NULL,
-                TimeCamisa      TEXT NOT NULL,
-                Tamanho         TEXT NOT NULL,
-                Marca           TEXT NOT NULL,
-                Preco           NUMERIC(10,2) NOT NULL
+                id_camisa INTEGER PRIMARY KEY AUTOINCREMENT,
+                id_produto INTEGER NOT NULL,
+                material TEXT NOT NULL,
+                timeCamisa TEXT NOT NULL,
+                tamanho TEXT NOT NULL,
+                FOREIGN KEY (id_produto) REFERENCES Produto(id_produto)
             )
         """;
 
         String sqlBola = """
             CREATE TABLE IF NOT EXISTS Bola (
-                id_Bola         INTEGER PRIMARY KEY,
-                Cor             TEXT NOT NULL,
-                Marca           TEXT NOT NULL,
-                Modelo          TEXT NOT NULL,
-                Tipo            TEXT NOT NULL,
-                Preco           NUMERIC(10,2) NOT NULL
+                id_bola INTEGER PRIMARY KEY AUTOINCREMENT,
+                id_produto INTEGER NOT NULL,
+                cor TEXT NOT NULL,
+                modelo TEXT NOT NULL,
+                tipo TEXT NOT NULL,
+                FOREIGN KEY (id_produto) REFERENCES Produto(id_produto)
             )
         """;
 
         String sqlChuteira = """
             CREATE TABLE IF NOT EXISTS Chuteira (
-                id_Chuteira   INTEGER PRIMARY KEY,
-                Marca           TEXT NOT NULL,
-                Tamanho         INTEGER NOT NULL,
-                Tipo            TEXT NOT NULL,
-                Cor             TEXT NOT NULL,
-                Preco           NUMERIC(10,2) NOT NULL
+                id_chuteira INTEGER PRIMARY KEY AUTOINCREMENT,
+                id_produto INTEGER NOT NULL,
+                tamanho INTEGER NOT NULL,
+                tipo TEXT NOT NULL,
+                cor TEXT NOT NULL,
+                FOREIGN KEY (id_produto) REFERENCES Produto(id_produto)
             )
         """;
 
-        //O nome executeUpdate() pode parecer confuso, mas ele é usado para qualquer comando SQL que altere a estrutura ou os dados
-        // Executa a criação de cada tabela
         stmt.executeUpdate(sqlProduto);
         stmt.executeUpdate(sqlCamisa);
         stmt.executeUpdate(sqlBola);
         stmt.executeUpdate(sqlChuteira);
-
+        stmt.executeUpdate(sqlCadastro);
     }
 
-    // Metodo genérico para comandos SQL sem retorno
-    // (DDL/DML: CREATE, INSERT, UPDATE, DELETE).
-    public static boolean executarSql(String sql) {
-        try{
-            // Abre a conexão
-            Connection conn = conectar();
+    public static boolean executarSql(String sql, Object... parametros) {
+        try (Connection conn = conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Cria um Statement simples
-            Statement stmt = conn.createStatement();
+            for (int i = 0; i < parametros.length; i++) {
+                Object param = parametros[i];
+                if (param instanceof String) stmt.setString(i + 1, (String) param);
+                else if (param instanceof Integer) stmt.setInt(i + 1, (Integer) param);
+                else if (param instanceof Double) stmt.setDouble(i + 1, (Double) param);
+            }
 
-            // Executa o comando
-            stmt.executeUpdate(sql);
-
-            conn.close();
-
+            stmt.executeUpdate();
             return true;
 
         } catch (SQLException e) {
             System.out.println("Erro ao executar SQL: " + e.getMessage());
         }
-
         return false;
     }
 
-    // Metodo genérico para SELECT
-
-    // Não abrimos a conexão porque precisamos manter-la aberta enquanto o ResultSet estiver em uso.
     public static ResultSet executarQuery(String sql, Connection conn) throws SQLException {
-        // Cria o Statement
         Statement stmt = conn.createStatement();
-
-        // Executa o SQL genérico
-
-        /*Retorna um ResultSet
-        O ResultSet contém uma tabela retornada por uma consulta
-
-        Você percorre as linhas uma por uma usando: resultSet.next();
-
-        Você pode pegar o valor de cada coluna em cada linha usando:
-        resultSet.get<tipodedados>("nome coluna");
-        Exemplo: rs.getString("titulo")
         return stmt.executeQuery(sql);
-
-
     }
-
-    */
-
 }

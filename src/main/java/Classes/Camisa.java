@@ -12,8 +12,8 @@ public class Camisa extends Produto{
         this.tamanho = tamanho;
     }
 
-    public Camisa(String nome, String categoria, double preco, int quantidade, String marca, String material, String timeCamisa, String tamanho) {
-        super(nome, categoria, preco, quantidade, marca);
+    public Camisa(String nome,  double preco, int quantidade, String marca, String material, String timeCamisa, String tamanho, String tipoProduto) {
+        super(nome, preco, quantidade, marca, tipoProduto);
         this.material = material;
         this.TimeCamisa = timeCamisa;
         this.tamanho = tamanho;
@@ -41,6 +41,12 @@ public class Camisa extends Produto{
 
     public void setTamanho(String tamanho) {
         this.tamanho = tamanho;
+    }
+
+    public void pesquisarCamisa() {
+
+        System.out.println("Executando pesquisa por Camisa.");
+        System.out.println("Critérios: Time=" + this.TimeCamisa + ", Tamanho=" + this.tamanho + ", Material=" + this.material);
     }
 
 }

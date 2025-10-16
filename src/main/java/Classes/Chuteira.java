@@ -12,8 +12,8 @@ public class Chuteira extends Produto{
         this.tipo = tipo;
     }
 
-    public Chuteira(String nome, String categoria, double preco, int quantidade, String marca, String tamanho, String cor, String tipo) {
-        super(nome, categoria, preco, quantidade, marca);
+    public Chuteira(String nome,  double preco, int quantidade, String marca, String tamanho, String cor, String tipo, String tipoProduto) {
+        super(nome, preco, quantidade, marca,tipoProduto);
         this.tamanho = tamanho;
         this.cor = cor;
         this.tipo = tipo;

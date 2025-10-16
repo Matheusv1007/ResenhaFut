@@ -3,21 +3,21 @@ package Classes;
 public class Produto {
 
     private String nome;
-    private String categoria;
     private double preco;
     private int quantidade;
     private  String marca;
+    private  String tipoProduto;
 
     public Produto(){
 
     }
 
-    public Produto(String nome, String categoria, double preco, int quantidade, String marca) {
+    public Produto(String nome, double preco, int quantidade, String marca, String tipoProduto) {
         this.nome = nome;
-        this.categoria = categoria;
         this.preco = preco;
         this.quantidade = quantidade;
         this.marca = marca;
+        this.tipoProduto = tipoProduto;
     }
 
     public String getNome() {
@@ -28,13 +28,6 @@ public class Produto {
         this.nome = nome;
     }
 
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
 
     public double getPreco() {
         return preco;
@@ -59,5 +52,13 @@ public class Produto {
 
     public void setMarca(String marca) {
         this.marca = marca;
+    }
+
+    public String getTipoProduto() {
+        return tipoProduto;
+    }
+
+    public void setTipoProduto(String tipo) {
+        this.tipoProduto = tipo;
     }
 }
