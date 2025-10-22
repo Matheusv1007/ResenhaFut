@@ -8,12 +8,12 @@ public class Cliente extends Pessoa
     
     public Cliente() {
         super();
-        this.HistoricoDeCompras = new LinkedList<Venda>();
+        this.HistoricoDeCompras = new LinkedList<>();
     }
     
     public Cliente(String nome, String cpf, String email, int idade, int telefone) {
         super(nome, cpf, email, idade, telefone);
-        this.HistoricoDeCompras = new LinkedList<Venda>();
+        this.HistoricoDeCompras = new LinkedList<>();
     }
 
     public LinkedList<Venda> getHistoricoDeCompras() {
