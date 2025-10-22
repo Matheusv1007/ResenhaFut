@@ -58,4 +58,12 @@ public abstract class  Pessoa {
     public void setTelefone(int telefone) {
         this.telefone = telefone;
     }
+    
+    public void exibirDados() {
+        System.out.println("Nome: " + nome);
+        System.out.println("CPF: " + Cpf);
+        System.out.println("Email: " + email);
+        System.out.println("Idade: " + idade);
+        System.out.println("Telefone: " + telefone);
+    }
 }

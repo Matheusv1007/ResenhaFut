@@ -30,4 +30,8 @@ public class Funcionario extends Pessoa{
     public void setSalario(double salario) {
         this.salario = salario;
     }
-}
+    
+    public void registrarVenda(Venda venda) {
+        System.out.println("Venda registrada pelo funcionário: " + this.getNome());
+    }
+};
