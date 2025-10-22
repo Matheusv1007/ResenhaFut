@@ -27,7 +27,7 @@ public class BolaRepository {
             idProduto = rs.getInt(1);
         }
 
-        String sqlBola = "INSERT INTO Bola(id_produto, cor,modelo,tipo) VALUES()?,?,?,? ";
+        String sqlBola = "INSERT INTO Bola(id_produto, cor,modelo,tipo) VALUES(?,?,?,?)";
 
         PreparedStatement stmtBola = conn.prepareStatement(sqlBola);
 

@@ -2,28 +2,28 @@ package Classes;
 
 public class Chuteira extends Produto{
 
-    private String tamanho;
+    private int tamanho;
     private  String cor;
     private  String tipo;
 
-    public Chuteira(String tamanho, String cor, String tipo) {
+    public Chuteira(int tamanho, String cor, String tipo) {
         this.tamanho = tamanho;
         this.cor = cor;
         this.tipo = tipo;
     }
 
-    public Chuteira(String nome,  double preco, int quantidade, String marca, String tamanho, String cor, String tipo, String tipoProduto) {
+    public Chuteira(String nome,  double preco, int quantidade, String marca, int tamanho, String cor, String tipo, String tipoProduto) {
         super(nome, preco, quantidade, marca,tipoProduto);
         this.tamanho = tamanho;
         this.cor = cor;
         this.tipo = tipo;
     }
 
-    public String getTamanho() {
+    public int getTamanho() {
         return tamanho;
     }
 
-    public void setTamanho(String tamanho) {
+    public void setTamanho(int tamanho) {
         this.tamanho = tamanho;
     }
 
@@ -41,5 +41,11 @@ public class Chuteira extends Produto{
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public void pesquisarChuteira() {
+
+        System.out.println("Executando pesquisa por Chuteira.");
+        System.out.println("Critérios: Marca=" + this.getMarca() + ", Tamanho=" + this.tamanho + ", Tipo=" + this.tipo);
     }
 }
