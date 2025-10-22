@@ -1,28 +1,25 @@
 package Classes;
 
 public class ItemVenda {
-
-    private Produto produto;
+    private String nomeProduto;
+    private double preco;
     private int quantidade;
-    private double precoUnitario;
-    private  String nome;
-    private String tipo;
 
-
-    public ItemVenda(Produto produto, int quantidade, double precoUnitario, String nome,String tipo) {
-        this.produto = produto;
+    public ItemVenda(String nomeProduto, int quantidade, double preco) {
+        this.nomeProduto = nomeProduto;
         this.quantidade = quantidade;
-        this.precoUnitario = precoUnitario;
-        this.nome = nome;
-        this.tipo = tipo;
+        this.preco = preco;
+    }
+    public double calcularTotal(){
+        return preco * quantidade;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public String getNomeProduto() {
+        return nomeProduto;
     }
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
+    public void setNomeProduto(String nomeProduto) {
+        this.nomeProduto = nomeProduto;
     }
 
     public int getQuantidade() {
@@ -33,27 +30,11 @@ public class ItemVenda {
         this.quantidade = quantidade;
     }
 
-    public double getPrecoUnitario() {
-        return precoUnitario;
+    public double getPreco() {
+        return preco;
     }
 
-    public void setPrecoUnitario(double precoUnitario) {
-        this.precoUnitario = precoUnitario;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setPreco(double preco) {
+        this.preco = preco;
     }
 }

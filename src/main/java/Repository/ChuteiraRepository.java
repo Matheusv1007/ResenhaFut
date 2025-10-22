@@ -30,7 +30,7 @@ public class ChuteiraRepository {
         String sqlChuteira = "INSERT INTO Chuteira (id_Produto, tamanho, tipo, cor) VALUES (?, ?, ?, ?)";
         PreparedStatement stmtChuteira = conn.prepareStatement(sqlChuteira);
         stmtChuteira.setInt(1, idProduto);
-        stmtChuteira.setString(2, chuteira.getTamanho());
+        stmtChuteira.setInt(2, chuteira.getTamanho());
         stmtChuteira.setString(3, chuteira.getTipo());
         stmtChuteira.setString(4, chuteira.getCor());
         stmtChuteira.executeUpdate();

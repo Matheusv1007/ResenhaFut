@@ -61,4 +61,38 @@ public class Produto {
     public void setTipoProduto(String tipo) {
         this.tipoProduto = tipo;
     }
+
+    public void adicionarProduto() {
+
+        System.out.println("Lógica para adicionar o produto '" + this.nome + "' ao sistema.");
+    }
+
+    public void removerProduto() {
+
+        System.out.println("Lógica para remover o produto '" + this.nome + "' do sistema.");
+    }
+
+    public void atualizarProduto() {
+
+        System.out.println("Lógica para atualizar as informações do produto '" + this.nome + "'.");
+    }
+
+    public void atualizarEstoque(int novaQuantidade) {
+
+        this.quantidade = novaQuantidade;
+        System.out.println("Estoque do produto '" + this.nome + "' atualizado para: " + this.quantidade);
+    }
+
+    public boolean verificarDisponibilidade() {
+
+        if (this.quantidade > 0) {
+
+            System.out.println("Produto '" + this.nome + "' está disponível.");
+            return true;
+        } else {
+
+            System.out.println("Produto '" + this.nome + "' está fora de estoque.");
+            return false;
+        }
+    }
 }

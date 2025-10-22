@@ -1,28 +1,36 @@
 package Classes;
 
 public class Pagamento {
+    private String tipodePagamento;
+    private double valor;
 
-    private String formaPagamento;
-    private double valorPago;
-
-    public Pagamento(String formaPagamento, double valorPago) {
-        this.formaPagamento = formaPagamento;
-        this.valorPago = valorPago;
+    public Pagamento(String tipodePagamento, double valor) {
+        this.tipodePagamento = tipodePagamento;
+        this.valor = valor;
+    }
+    public boolean confirmarPagamento() {
+        if (valor > 0) {
+            System.out.println("Valor R$:" + valor + "Forma de pagamento" + tipodePagamento + "Pagamento Concluido!");
+            return true;
+        } else {
+            System.out.println("Pagamento invalido!");
+            return false;
+        }
     }
 
-    public String getFormaPagamento() {
-        return formaPagamento;
+    public String getTipodePagamento() {
+        return tipodePagamento;
     }
 
-    public void setFormaPagamento(String formaPagamento) {
-        this.formaPagamento = formaPagamento;
+    public void setTipodePagamento(String tipodePagamento) {
+        this.tipodePagamento = tipodePagamento;
     }
 
-    public double getValorPago() {
-        return valorPago;
+    public double getValor() {
+        return valor;
     }
 
-    public void setValorPago(double valorPago) {
-        this.valorPago = valorPago;
+    public void setValor(double valor) {
+        this.valor = valor;
     }
 }
