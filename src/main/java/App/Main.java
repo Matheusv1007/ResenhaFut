@@ -8,12 +8,12 @@ public class Main {
 
         FrmPrincipal frmPrincipal = new FrmPrincipal();
         try {
-            // Abre a conexão e cria as tabelas
+
             Conexao.conectar();
-            System.out.println("Banco aberto e tabelas criadas com sucesso!");
+            System.out.println("Banco aberto");
 
         } catch (Exception e) {
-            System.out.println("Erro ao abrir o banco: " + e.getMessage());
+            System.out.println("Erro " + e.getMessage());
         }
        }
 
