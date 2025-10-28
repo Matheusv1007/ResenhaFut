@@ -23,6 +23,7 @@ public class FrmCadastro extends JInternalFrame{
     private JLabel idade;
     private JLabel nome;
     private JButton Cancelar;
+    private JPasswordField textpassword;
 
     public FrmCadastro() {
 
@@ -67,7 +68,7 @@ public class FrmCadastro extends JInternalFrame{
                     // Cria um objeto Livro com os dados digitados no formulário e exibe no formato CSV
                     // O metodo getText() pega o texto digitado no campo de entrada
                     Cadastro pessoa = new Cadastro();
-                    pessoa.setSenha(textfieldSenha.getText());
+                    pessoa.setSenha(textpassword.getText());
                     pessoa.setEmail(textfieldEmail.getText());
                     pessoa.setIdade(Integer.parseInt(textfiledIdade.getText()));
                     pessoa.setNome(textfieldNome.getText());
@@ -104,4 +105,5 @@ public class FrmCadastro extends JInternalFrame{
             }
         });
     }
+
 }
