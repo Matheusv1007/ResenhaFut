@@ -1,7 +1,6 @@
 package janela;
 
 import Classes.Cadastro;
-
 import Repository.CadastroRepository;
 import util.FormUtil;
 import javax.swing.*;
@@ -9,13 +8,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
-public class FrmCadastro extends JInternalFrame{
+public class FrmCadastro extends JInternalFrame {
     private JPanel jpanel;
     private JFormattedTextField textfieldNome;
     private JFormattedTextField textfiledIdade;
     private JFormattedTextField textefiedCpf;
     private JFormattedTextField textfieldEmail;
-    private JFormattedTextField textfieldSenha;
+    // Remova o textfieldSenha se você estiver usando o JPasswordField
+    // private JFormattedTextField textfieldSenha;
     private JButton cadastrar;
     private JLabel confirmarSenha;
     private JLabel senha;
@@ -23,62 +23,49 @@ public class FrmCadastro extends JInternalFrame{
     private JLabel idade;
     private JLabel nome;
     private JButton Cancelar;
-    private JPasswordField textpassword;
+    private JPasswordField textpassword; // Este é o campo de senha correto
 
     public FrmCadastro() {
 
         this.setTitle("Cadastro");
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setSize(480,400);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Fecha só esta janela
+        this.setSize(480, 400);
         this.setResizable(false);
         this.setClosable(true);
-        this.setResizable(true);
-        this.setResizable(false);
-        this.setIconifiable(true);
+        this.setIconifiable(true); // Permite minimizar
         this.setContentPane(jpanel);
         this.setVisible(true);
 
+        // Apenas UM ActionListener para o botão cadastrar
         cadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               Cadastro pessoa =  new Cadastro();
-               pessoa.setSenha(textfieldSenha.getText());
-               pessoa.setCpf(textefiedCpf.getText());
-               pessoa.setEmail(textfieldEmail.getText());
-               pessoa.setNome(textfieldNome.getText());
-               pessoa.setIdade(Integer.parseInt(textfiledIdade.getText()));
+                // Declara um vetor com os campos de texto do formulário
+                JTextField[] campos = {textfieldEmail, textfieldNome, textefiedCpf, textfiledIdade};
 
-            }
-        });
+                // Pega a senha da forma correta
+                String senha = new String(textpassword.getPassword());
 
-        cadastrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Declara um vetor com os campos  do formulário
-                JTextField[]  campos = {textfieldEmail, textfieldSenha,textfieldNome,textefiedCpf,textfiledIdade};
-
-                if (FormUtil.hasEmpty(campos)) {
-                    // Exibe mensagem de erro caso algum campo esteja vazio
+                // Verifica se campos de texto OU a senha estão vazios
+                if (FormUtil.hasEmpty(campos) || senha.isEmpty()) {
                     JOptionPane.showMessageDialog(FrmCadastro.this,
                             "Preencher todos os campos obrigatórios",
                             "Erro ao salvar",
                             JOptionPane.ERROR_MESSAGE);
-
                 } else {
-                    // Cria um objeto Livro com os dados digitados no formulário e exibe no formato CSV
-                    // O metodo getText() pega o texto digitado no campo de entrada
                     Cadastro pessoa = new Cadastro();
-                    pessoa.setSenha(textpassword.getText());
+                    pessoa.setSenha(senha); // Usa a senha do JPasswordField
                     pessoa.setEmail(textfieldEmail.getText());
                     pessoa.setIdade(Integer.parseInt(textfiledIdade.getText()));
                     pessoa.setNome(textfieldNome.getText());
                     pessoa.setCpf(textefiedCpf.getText());
 
                     try {
-
                         CadastroRepository.inserir(pessoa);
 
+                        // Limpa os campos
                         FormUtil.cleanJTexts(campos);
+                        textpassword.setText(""); // Limpa a senha manualmente
 
                         JOptionPane.showMessageDialog(
                                 FrmCadastro.this,
@@ -86,15 +73,21 @@ public class FrmCadastro extends JInternalFrame{
                                 "Sucesso",
                                 JOptionPane.INFORMATION_MESSAGE);
 
-                    } catch (SQLException ex) {
+                        dispose(); // Fecha a janela de cadastro após sucesso
 
+                    } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(
                                 null,
-                                "Erro ao inserir livro: " + ex.getMessage()
+                                "Erro ao inserir no banco: " + ex.getMessage()
+                        );
+                        ex.printStackTrace();
+                    } catch (NumberFormatException nfe) {
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Erro: A idade deve ser um número válido."
                         );
                     }
                 }
-
             }
         });
 
@@ -105,5 +98,4 @@ public class FrmCadastro extends JInternalFrame{
             }
         });
     }
-
 }
