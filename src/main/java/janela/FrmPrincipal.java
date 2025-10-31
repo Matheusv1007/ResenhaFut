@@ -14,12 +14,16 @@ public class FrmPrincipal extends JFrame {
     private JMenu menuCadastro;
     private JMenu menuPesquisa;
     private JMenu menuLogin;
-    // private JMenu menuLoja; // --- REMOVIDO ---
     private JMenu menuUsuario;
 
+    private FrmLogin janelaLoginCliente;
+    private FrmLoginForne janelaLoginFornecedor;
+
+
     private JMenuItem menuCadastroCliente;
+    private JMenuItem menuCadastroFornecedor;
+    private JMenuItem menuCadastroProduto;
     private JMenuItem menuPesquisarProduto;
-    // private JMenuItem itemAbrirLoja; // --- REMOVIDO ---
     private JMenuItem itemLogout;
 
     private JDesktopPane desktop;
@@ -27,6 +31,15 @@ public class FrmPrincipal extends JFrame {
     private FrmLojaPrincipal janelaLoja;
     private FrmLogin janelaLogin;
     private FrmCadastro janelaCadastro;
+    private FrmCadastroFornecedor janelaCadastroFornecedor;
+    private FrmCadastroProduto janelaCadastroProduto;
+    private FrmPesquisaProduto janelaPesquisaProduto;
+
+
+    public void mostrarMenuProdutoFornecedor(boolean mostrar) {
+        menuCadastroProduto.setVisible(mostrar);
+    }
+
 
     public FrmPrincipal() {
         this.setTitle("Resenha Fut");
@@ -42,34 +55,37 @@ public class FrmPrincipal extends JFrame {
         menuBar = new JMenuBar();
         this.setJMenuBar(menuBar);
 
-        // --- MENUS ---
-        // menuLoja = new JMenu("Loja"); // --- REMOVIDO ---
+
         menuCadastro = new JMenu("Cadastro");
-        menuPesquisa = new JMenu("Pesquisar"); // <--- "Pesquisar" está aqui
+        menuPesquisa = new JMenu("Pesquisar");
         menuLogin = new JMenu("Login");
         menuUsuario = new JMenu("Usuário");
 
-        // --- ORDEM DA BARRA ---
-        // menuBar.add(menuLoja); // --- REMOVIDO ---
         menuBar.add(menuCadastro);
         menuBar.add(menuLogin);
-        menuBar.add(menuPesquisa); // <--- "Pesquisar" está aqui
+        menuBar.add(menuPesquisa);
         menuBar.add(menuUsuario);
 
-        // --- ITENS DE MENU ---
         menuCadastroCliente = new JMenuItem("Cadastro Cliente");
         menuCadastro.add(menuCadastroCliente);
 
-        JMenuItem itemLogin = new JMenuItem("Realizar Login");
+        menuCadastroFornecedor = new JMenuItem("Cadastro Fornecedor");
+        menuCadastro.add(menuCadastroFornecedor);
+
+        menuCadastroProduto = new JMenuItem("Cadastro Produto");
+        menuCadastro.add(menuCadastroProduto);
+
+        menuCadastroProduto.setVisible(false);
+
+
+        JMenuItem itemLogin = new JMenuItem("Login Cliente");
         menuLogin.add(itemLogin);
+
+        JMenuItem itemLogin1 = new JMenuItem("Login Fornecedor");
+        menuLogin.add(itemLogin1);
 
         menuPesquisarProduto = new JMenuItem("Pesquisar Produto");
         menuPesquisa.add(menuPesquisarProduto);
-
-        // --- ITENS DO MENU LOJA REMOVIDOS ---
-        // itemAbrirLoja = new JMenuItem("Ver Loja");
-        // menuLoja.add(itemAbrirLoja);
-        // itemAbrirLoja.setEnabled(false);
 
         itemLogout = new JMenuItem("Logout");
         menuUsuario.add(itemLogout);
@@ -77,7 +93,7 @@ public class FrmPrincipal extends JFrame {
         desktop = new JDesktopPane();
         this.add(desktop);
 
-        // Listener de redimensionamento (continua igual)
+
         desktop.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -87,7 +103,7 @@ public class FrmPrincipal extends JFrame {
             }
         });
 
-        // Listeners de menu (Cadastro, Login, Logout) (continuam iguais)
+
         menuCadastroCliente.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (janelaCadastro == null || janelaCadastro.isClosed()) {
@@ -107,14 +123,81 @@ public class FrmPrincipal extends JFrame {
         itemLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (janelaLogin == null || janelaLogin.isClosed()) {
-                    janelaLogin = new FrmLogin(FrmPrincipal.this);
-                    desktop.add(janelaLogin);
+                if (janelaLoginCliente == null || janelaLoginCliente.isClosed()) {
+                    janelaLoginCliente = new FrmLogin(FrmPrincipal.this);
+                    desktop.add(janelaLoginCliente);
                 }
-                janelaLogin.setVisible(true);
+                janelaLoginCliente.setVisible(true);
                 try {
-                    if (janelaLogin.isIcon()) janelaLogin.setIcon(false);
-                    janelaLogin.setSelected(true);
+                    if (janelaLoginCliente.isIcon()) janelaLoginCliente.setIcon(false);
+                    janelaLoginCliente.setSelected(true);
+                } catch (java.beans.PropertyVetoException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        itemLogin1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (janelaLoginFornecedor == null || janelaLoginFornecedor.isClosed()) {
+                    janelaLoginFornecedor = new FrmLoginForne(FrmPrincipal.this);
+                    desktop.add(janelaLoginFornecedor);
+                }
+                janelaLoginFornecedor.setVisible(true);
+                try {
+                    if (janelaLoginFornecedor.isIcon()) janelaLoginFornecedor.setIcon(false);
+                    janelaLoginFornecedor.setSelected(true);
+                } catch (java.beans.PropertyVetoException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+
+        menuCadastroFornecedor.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (janelaCadastroFornecedor == null || janelaCadastroFornecedor.isClosed()) {
+                    janelaCadastroFornecedor = new FrmCadastroFornecedor();
+                    desktop.add(janelaCadastroFornecedor);
+                }
+                janelaCadastroFornecedor.setVisible(true);
+                try {
+                    if (janelaCadastroFornecedor.isIcon()) janelaCadastroFornecedor.setIcon(false);
+                    janelaCadastroFornecedor.setSelected(true);
+                } catch (java.beans.PropertyVetoException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        menuCadastroProduto.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (janelaCadastroProduto == null || janelaCadastroProduto.isClosed()) {
+                    janelaCadastroProduto = new FrmCadastroProduto();
+                    desktop.add(janelaCadastroProduto);
+                }
+                janelaCadastroProduto.setVisible(true);
+                try {
+                    if (janelaCadastroProduto.isIcon()) janelaCadastroProduto.setIcon(false);
+                    janelaCadastroProduto.setSelected(true);
+                } catch (java.beans.PropertyVetoException ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+
+        menuPesquisarProduto.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (janelaPesquisaProduto == null || janelaPesquisaProduto.isClosed()) {
+                    janelaPesquisaProduto = new FrmPesquisaProduto();
+                    desktop.add(janelaPesquisaProduto);
+                }
+                janelaPesquisaProduto.setVisible(true);
+                try {
+                    if (janelaPesquisaProduto.isIcon()) janelaPesquisaProduto.setIcon(false);
+                    janelaPesquisaProduto.setSelected(true);
                 } catch (java.beans.PropertyVetoException ex) {
                     ex.printStackTrace();
                 }
@@ -125,24 +208,22 @@ public class FrmPrincipal extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gerenciarVisibilidadeMenus(false);
+                menuCadastroProduto.setVisible(false);
+
             }
         });
 
-        // --- Inicialização ---
-        this.setVisible(true);
-        abrirJanelaLoja(); // Abre a loja
-        gerenciarVisibilidadeMenus(false);
-    }
 
+        this.setVisible(true);
+        abrirJanelaLoja();
+        gerenciarVisibilidadeMenus(false);
+
+    }
 
     public void gerenciarVisibilidadeMenus(boolean logado) {
         menuCadastro.setVisible(!logado);
         menuLogin.setVisible(!logado);
 
-        // --- MUDANÇA AQUI ---
-        // Removemos o menu "Pesquisar" desta lógica.
-        // Agora ele ficará sempre visível.
-        // menuPesquisa.setVisible(logado); // <--- LINHA REMOVIDA
 
         menuUsuario.setVisible(logado);
 
@@ -154,14 +235,28 @@ public class FrmPrincipal extends JFrame {
             }
             janelaCadastro = null;
             janelaLogin = null;
+            janelaCadastroFornecedor = null;
+            janelaCadastroProduto = null;
+            janelaPesquisaProduto = null;
         }
+    }
+    public void loginFornecedor() {
+
+        menuLogin.setVisible(false);
+        menuUsuario.setVisible(true);
+        itemLogout.setVisible(true);
+
+
+        menuCadastro.setVisible(true);
+        menuCadastroProduto.setVisible(true);
+        menuCadastroCliente.setVisible(false);
+        menuCadastroFornecedor.setVisible(false);
+
+
+        menuPesquisa.setVisible(true);
     }
 
 
-    /**
-     * Abre a janela da loja (agora fixa)
-     * (Este método continua igual)
-     */
     private void abrirJanelaLoja() {
         if (janelaLoja == null) {
             janelaLoja = new FrmLojaPrincipal();

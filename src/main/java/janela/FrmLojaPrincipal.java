@@ -9,33 +9,21 @@ import java.net.URL;
 public class FrmLojaPrincipal extends JInternalFrame {
 
     public FrmLojaPrincipal() {
-        // --- MUDANÇA AQUI ---
-        // Trocamos o construtor 'super()' para remover todos os controles
-        // super("Loja - Resenha Fut", true, true, true, true); // <--- LINHA ANTIGA
-        super(null,   // Título (null)
-                false,  // Redimensionável (false)
-                false,  // Fechável (false)
-                false,  // Maximizável (false)
-                false); // Minimizável (false)
 
-        // Esta é a parte que remove a barra de título superior
+        super(null,
+                false,
+                false,
+                false,
+                false);
+
         ((BasicInternalFrameUI) this.getUI()).setNorthPane(null);
 
-        // Remove qualquer borda que tenha sobrado
         this.setBorder(null);
-        // --- FIM DA MUDANÇA ---
 
-        // O tamanho será controlado pela FrmPrincipal, mas podemos definir um inicial
         setSize(800, 600);
 
-        // O resto do seu código continua igual
         configurarPainelLoja();
     }
-
-    /**
-     * Configura o painel principal da loja com os produtos.
-     * (Este método continua exatamente o mesmo, não precisa copiar de novo)
-     */
     private void configurarPainelLoja() {
         JPanel painelProdutos = new JPanel();
         painelProdutos.setLayout(new GridLayout(0, 3, 20, 20));
@@ -49,17 +37,13 @@ public class FrmLojaPrincipal extends JInternalFrame {
         JScrollPane scrollPane = new JScrollPane(painelProdutos);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Scroll mais rápido
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
         getContentPane().add(scrollPane, BorderLayout.CENTER);
     }
 
-    /**
-     * Cria um JPanel que representa um cartão de produto.
-     * (Este método continua exatamente o mesmo, não precisa copiar de novo)
-     */
     private JPanel criarCartaoProduto(String imagemPath, String descricao, String preco) {
-        // ... (código idêntico ao anterior) ...
+
         JPanel cartao = new JPanel();
         cartao.setLayout(new BoxLayout(cartao, BoxLayout.Y_AXIS));
         cartao.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));

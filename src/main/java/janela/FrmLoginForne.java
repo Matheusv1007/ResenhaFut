@@ -1,7 +1,7 @@
 package janela;
 
+import Classes.Fornecedor;
 import Repository.Conexao;
-
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
@@ -15,24 +15,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class FrmLogin extends JInternalFrame {
-    private JPanel panel1;
-    private JTextField txtEmail;
-    private JLabel lblSenha;
-    private JLabel lblEmail;
-    private JLabel lblTitulo;
-    private JButton cancelar;
+public class FrmLoginForne extends JInternalFrame {
+    private JPanel PainelPrincipal;
+    private JLabel Login;
     private JButton entrar;
-    private JPasswordField txtSenha;
-    private JButton btnCancelar;
-    private JButton btnEntrar;
+    private JButton cancelar;
+    private JTextField textEmail;
+    private JPasswordField password;
+    private JLabel Email;
+    private JLabel senha;
 
     public FrmPrincipal principal;
 
-    public FrmLogin(FrmPrincipal principal) {
-
+    public FrmLoginForne(FrmPrincipal principal) {
         this.principal = principal;
-
         this.setTitle("Login");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setSize(450, 300);
@@ -41,99 +37,93 @@ public class FrmLogin extends JInternalFrame {
         this.setIconifiable(true);
 
         inicializarComponentes();
-
         this.setVisible(true);
-
     }
 
     private void inicializarComponentes() {
-        panel1 = new JPanel();
-        panel1.setLayout(null);
-        panel1.setBackground(new Color(240, 240, 240));
+        PainelPrincipal = new JPanel();
+        PainelPrincipal.setLayout(null);
+        PainelPrincipal.setBackground(new Color(240, 240, 240));
+
 
         JLabel lblTitulo = new JLabel("Login");
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
         lblTitulo.setBounds(180, 20, 100, 30);
-        panel1.add(lblTitulo);
+        PainelPrincipal.add(lblTitulo);
 
+        Email = new JLabel("Email:");
+        Email.setBounds(50, 80, 100, 25);
+        PainelPrincipal.add(Email);
 
-        JLabel lblEmail = new JLabel("Email:");
-        lblEmail.setBounds(50, 80, 100, 25);
-        panel1.add(lblEmail);
+        textEmail = new JFormattedTextField();
+        textEmail.setBounds(150, 80, 250, 25);
+        textEmail.setToolTipText("Digite seu email");
+        ((AbstractDocument) textEmail.getDocument()).setDocumentFilter(new EmailFilter());
+        PainelPrincipal.add(textEmail);
 
-        txtEmail = new JTextField();
-        txtEmail.setBounds(150, 80, 250, 25);
-        txtEmail.setToolTipText("Digite seu email");
-        ((AbstractDocument) txtEmail.getDocument()).setDocumentFilter(new EmailFilter());
-        panel1.add(txtEmail);
+        senha = new JLabel("Senha:");
+        senha.setBounds(50, 130, 100, 25);
+        PainelPrincipal.add(senha);
 
+        password = new JPasswordField();
+        password.setBounds(150, 130, 250, 25);
+        PainelPrincipal.add(password);
 
-        JLabel lblSenha = new JLabel("Senha:");
-        lblSenha.setBounds(50, 130, 100, 25);
-        panel1.add(lblSenha);
+        entrar = new JButton("Entrar");
+        entrar.setBounds(150, 190, 100, 30);
+        entrar.setBackground(new Color(0, 150, 0));
+        entrar.setForeground(Color.WHITE);
+        entrar.setFocusPainted(false);
+        PainelPrincipal.add(entrar);
 
-        txtSenha = new JPasswordField();
-        txtSenha.setBounds(150, 130, 250, 25);
-        panel1.add(txtSenha);
+        cancelar = new JButton("Cancelar");
+        cancelar.setBounds(260, 190, 100, 30);
+        cancelar.setBackground(new Color(200, 200, 200));
+        cancelar.setFocusPainted(false);
+        PainelPrincipal.add(cancelar);
 
-
-        btnEntrar = new JButton("Entrar");
-        btnEntrar.setBounds(150, 190, 100, 30);
-        btnEntrar.setBackground(new Color(0, 150, 0));
-        btnEntrar.setForeground(Color.WHITE);
-        btnEntrar.setFocusPainted(false);
-        panel1.add(btnEntrar);
-
-        btnCancelar = new JButton("Cancelar");
-        btnCancelar.setBounds(260, 190, 100, 30);
-        btnCancelar.setBackground(new Color(200, 200, 200));
-        btnCancelar.setFocusPainted(false);
-        panel1.add(btnCancelar);
-
-        btnEntrar.addActionListener(new ActionListener() {
+        entrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 if (verificarLogin()) {
-                    principal.gerenciarVisibilidadeMenus(true);
-                    JOptionPane.showMessageDialog(FrmLogin.this, "Login realizado com sucesso!");
+
+                    principal.loginFornecedor();
+                    JOptionPane.showMessageDialog(FrmLoginForne.this, "Login realizado com sucesso!");
                     dispose();
                 }
-
             }
         });
 
-        btnCancelar.addActionListener(new ActionListener() {
+        cancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FrmLogin.this.dispose();
+                dispose();
             }
         });
 
-        this.setContentPane(panel1);
+        this.setContentPane(PainelPrincipal);
     }
 
-
     private boolean verificarLogin() {
-        String email = txtEmail.getText();
-        String senha = new String(txtSenha.getPassword());
+        String email = textEmail.getText().trim().replaceAll("\\s+", "");
+        String senha = new String(password.getPassword()).trim();
 
         if (email.isEmpty() || senha.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Preencha todos os campos!");
             return false;
         }
 
-        if (checarBanco(email, senha)) {
-            return true;
-        } else {
+        boolean sucesso = checarBanco(email, senha);
+        if (!sucesso) {
             JOptionPane.showMessageDialog(this, "Email ou senha incorretos!");
-            return false;
         }
+        return sucesso;
     }
+
 
     private boolean checarBanco(String email, String senha) {
         boolean sucesso = false;
-        String sql = "SELECT * FROM Cadastro WHERE email = ? AND senha = ?";
+        String sql = "SELECT * FROM CadastroFornecedor WHERE email = ? AND senha = ? ";
 
         try (Connection con = Conexao.conectar();
              PreparedStatement pst = con.prepareStatement(sql)) {
@@ -153,7 +143,6 @@ public class FrmLogin extends JInternalFrame {
 
         return sucesso;
     }
-
 
     private class EmailFilter extends DocumentFilter {
         @Override

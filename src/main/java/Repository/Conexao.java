@@ -30,6 +30,19 @@ public class Conexao {
             )
         """;
 
+        String sqlCadastroFornecedor = """
+            CREATE TABLE IF NOT EXISTS CadastroFornecedor(
+               id_fornecedor  INTEGER PRIMARY KEY AUTOINCREMENT,
+               nome TEXT NOT NULL,
+               cnpj TEXT NOT NULL,
+               telefone TEXT NOT NULL,
+               email TEXT NOT NULL,
+               endereco  TEXT NOT NULL,
+               cidade TEXT NOT NULL,
+               estado TEXT NOT NULL,
+               senha TEXT NOT NULL
+)""";
+
         String sqlProduto = """
             CREATE TABLE IF NOT EXISTS Produto (
                 id_produto INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -77,6 +90,7 @@ public class Conexao {
         stmt.executeUpdate(sqlBola);
         stmt.executeUpdate(sqlChuteira);
         stmt.executeUpdate(sqlCadastro);
+        stmt.executeUpdate(sqlCadastroFornecedor);
     }
 
     public static boolean executarSql(String sql, Object... parametros) {
