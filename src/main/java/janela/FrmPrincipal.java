@@ -18,6 +18,8 @@ public class FrmPrincipal extends JFrame {
     private JMenu menuUsuario;
 
     private JMenuItem menuCadastroCliente;
+    private JMenuItem menuCadastroFornecedor;
+    private JMenuItem menuCadastroProduto;
     private JMenuItem menuPesquisarProduto;
     // private JMenuItem itemAbrirLoja; // --- REMOVIDO ---
     private JMenuItem itemLogout;
@@ -27,6 +29,9 @@ public class FrmPrincipal extends JFrame {
     private FrmLojaPrincipal janelaLoja;
     private FrmLogin janelaLogin;
     private FrmCadastro janelaCadastro;
+    private FrmCadastroFornecedor janelaCadastroFornecedor;
+    private FrmCadastroProduto janelaCadastroProduto;
+    private FrmPesquisaProduto janelaPesquisaProduto;
 
     public FrmPrincipal() {
         this.setTitle("Resenha Fut");
@@ -59,6 +64,12 @@ public class FrmPrincipal extends JFrame {
         // --- ITENS DE MENU ---
         menuCadastroCliente = new JMenuItem("Cadastro Cliente");
         menuCadastro.add(menuCadastroCliente);
+        
+        menuCadastroFornecedor = new JMenuItem("Cadastro Fornecedor");
+        menuCadastro.add(menuCadastroFornecedor);
+        
+        menuCadastroProduto = new JMenuItem("Cadastro Produto");
+        menuCadastro.add(menuCadastroProduto);
 
         JMenuItem itemLogin = new JMenuItem("Realizar Login");
         menuLogin.add(itemLogin);
@@ -121,6 +132,54 @@ public class FrmPrincipal extends JFrame {
             }
         });
 
+        menuCadastroFornecedor.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (janelaCadastroFornecedor == null || janelaCadastroFornecedor.isClosed()) {
+                    janelaCadastroFornecedor = new FrmCadastroFornecedor();
+                    desktop.add(janelaCadastroFornecedor);
+                }
+                janelaCadastroFornecedor.setVisible(true);
+                try {
+                    if (janelaCadastroFornecedor.isIcon()) janelaCadastroFornecedor.setIcon(false);
+                    janelaCadastroFornecedor.setSelected(true);
+                } catch (java.beans.PropertyVetoException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        
+        menuCadastroProduto.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (janelaCadastroProduto == null || janelaCadastroProduto.isClosed()) {
+                    janelaCadastroProduto = new FrmCadastroProduto();
+                    desktop.add(janelaCadastroProduto);
+                }
+                janelaCadastroProduto.setVisible(true);
+                try {
+                    if (janelaCadastroProduto.isIcon()) janelaCadastroProduto.setIcon(false);
+                    janelaCadastroProduto.setSelected(true);
+                } catch (java.beans.PropertyVetoException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        
+        menuPesquisarProduto.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (janelaPesquisaProduto == null || janelaPesquisaProduto.isClosed()) {
+                    janelaPesquisaProduto = new FrmPesquisaProduto();
+                    desktop.add(janelaPesquisaProduto);
+                }
+                janelaPesquisaProduto.setVisible(true);
+                try {
+                    if (janelaPesquisaProduto.isIcon()) janelaPesquisaProduto.setIcon(false);
+                    janelaPesquisaProduto.setSelected(true);
+                } catch (java.beans.PropertyVetoException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         itemLogout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -154,6 +213,9 @@ public class FrmPrincipal extends JFrame {
             }
             janelaCadastro = null;
             janelaLogin = null;
+            janelaCadastroFornecedor = null;
+            janelaCadastroProduto = null;
+            janelaPesquisaProduto = null;
         }
     }
 
