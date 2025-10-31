@@ -3,6 +3,11 @@ package janela;
 import Repository.Conexao;
 
 import javax.swing.*;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -11,12 +16,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class FrmLogin extends JInternalFrame {
-    private JPanel panel1;
-    private JLabel Login;
-    private JFormattedTextField TextFieldEmail;
-    private JPasswordField passwordSenha;
-    private JButton cancelar;
-    private JButton entrar;
+    private JPanel painelPrincipal;
+    private JTextField txtEmail;
+    private JPasswordField txtSenha;
+    private JButton btnCancelar;
+    private JButton btnEntrar;
 
     // Guardamos a referência da janela principal
     public FrmPrincipal principal;
@@ -25,25 +29,72 @@ public class FrmLogin extends JInternalFrame {
         // Recebe a FrmPrincipal e a armazena
         this.principal = principal;
 
-        setTitle("Login");
+        this.setTitle("Login");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setSize(480, 400);
+        this.setSize(450, 300);
         this.setResizable(false);
         this.setClosable(true);
         this.setIconifiable(true);
-        this.setContentPane(panel1);
+        
+        inicializarComponentes();
+        
         this.setVisible(true);
 
-        entrar.addActionListener(new ActionListener() {
+    }
+    
+    private void inicializarComponentes() {
+        painelPrincipal = new JPanel();
+        painelPrincipal.setLayout(null);
+        painelPrincipal.setBackground(new Color(240, 240, 240));
+        
+        // Título
+        JLabel lblTitulo = new JLabel("Login");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
+        lblTitulo.setBounds(180, 20, 100, 30);
+        painelPrincipal.add(lblTitulo);
+        
+        // Label e campo Email
+        JLabel lblEmail = new JLabel("Email:");
+        lblEmail.setBounds(50, 80, 100, 25);
+        painelPrincipal.add(lblEmail);
+        
+        txtEmail = new JTextField();
+        txtEmail.setBounds(150, 80, 250, 25);
+        txtEmail.setToolTipText("Digite seu email");
+        ((AbstractDocument) txtEmail.getDocument()).setDocumentFilter(new EmailFilter());
+        painelPrincipal.add(txtEmail);
+        
+        // Label e campo Senha
+        JLabel lblSenha = new JLabel("Senha:");
+        lblSenha.setBounds(50, 130, 100, 25);
+        painelPrincipal.add(lblSenha);
+        
+        txtSenha = new JPasswordField();
+        txtSenha.setBounds(150, 130, 250, 25);
+        painelPrincipal.add(txtSenha);
+        
+        // Botões
+        btnEntrar = new JButton("Entrar");
+        btnEntrar.setBounds(150, 190, 100, 30);
+        btnEntrar.setBackground(new Color(0, 150, 0));
+        btnEntrar.setForeground(Color.WHITE);
+        btnEntrar.setFocusPainted(false);
+        painelPrincipal.add(btnEntrar);
+        
+        btnCancelar = new JButton("Cancelar");
+        btnCancelar.setBounds(260, 190, 100, 30);
+        btnCancelar.setBackground(new Color(200, 200, 200));
+        btnCancelar.setFocusPainted(false);
+        painelPrincipal.add(btnCancelar);
+        
+        // Listeners
+        btnEntrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Verifica o login primeiro
                 if (verificarLogin()) {
-
-                    // AQUI ESTÁ A MUDANÇA:
                     // Chama o método na FrmPrincipal para ATUALIZAR OS MENUS
                     principal.gerenciarVisibilidadeMenus(true);
-
                     JOptionPane.showMessageDialog(FrmLogin.this, "Login realizado com sucesso!");
                     dispose(); // Fecha a janela de login
                 }
@@ -51,12 +102,14 @@ public class FrmLogin extends JInternalFrame {
             }
         });
 
-        cancelar.addActionListener(new ActionListener() {
+        btnCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 FrmLogin.this.dispose();
             }
         });
+        
+        this.setContentPane(painelPrincipal);
     }
 
     /**
@@ -64,8 +117,8 @@ public class FrmLogin extends JInternalFrame {
      * Mostra as mensagens de erro internamente.
      */
     private boolean verificarLogin() {
-        String email = TextFieldEmail.getText();
-        String senha = new String(passwordSenha.getPassword());
+        String email = txtEmail.getText();
+        String senha = new String(txtSenha.getPassword());
 
         if (email.isEmpty() || senha.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Preencha todos os campos!");
@@ -101,5 +154,22 @@ public class FrmLogin extends JInternalFrame {
         }
 
         return sucesso;
+    }
+    
+    // Filtro para email (permite letras, números, @, ., _, -)
+    private class EmailFilter extends DocumentFilter {
+        @Override
+        public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+            if (string != null && string.matches("[a-zA-Z0-9@._-]*")) {
+                super.insertString(fb, offset, string, attr);
+            }
+        }
+        
+        @Override
+        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+            if (text != null && text.matches("[a-zA-Z0-9@._-]*")) {
+                super.replace(fb, offset, length, text, attrs);
+            }
+        }
     }
 }
